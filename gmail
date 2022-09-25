@@ -1,0 +1,54 @@
+import imaplib
+
+import email
+
+
+
+myemailaddress = 'your_email_address'
+
+#create a password.txt file and put your password in their. 
+mypassword = ""
+with open("password.txt", "r") as f:
+    password = f.read().strip()
+imap_url = "imap.gmail.com"
+
+# connect to host using SSL
+mb = imaplib.IMAP4_SSL(imap_url)
+
+## login to server
+rv, mesasge  = mb.login(myemailaddress, password)
+
+
+# 'OK', [b'LOGIN completed']
+
+rv, num_emails = mb.select('Inbox')
+# 'OK', [b'22']
+#print(num_emails)
+
+# Get unread messages
+#rv, messages = mb.search(None, 'UNSEEN')
+
+typ, msgnums = mb.search(None, '(FROM "Slickdeals")')
+# 'OK', [b'21 22']
+
+typ, data = mb.search(None, 'ALL')
+for num in data[0].split():
+   mb.store(num, '+FLAGS', '\\Deleted')
+mb.expunge()
+#rv, messages1 =  mb.search(None, 'Amazon Prime')
+
+
+# Download a message
+
+# Print the Plain Text (is this always the plain text?)
+
+
+
+
+
+
+#('OK', [List])
+#1st value ok means successful the second is the list of avaliable mail in inbox. 
+
+
+            

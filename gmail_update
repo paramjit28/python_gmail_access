@@ -1,0 +1,33 @@
+import imaplib
+
+
+myemailaddress = 'your-email-address'
+
+#create a password.txt file and put in your password in their.
+mypassword = ""
+with open("password.txt", "r") as f:
+    password = f.read().strip()
+imap_url = "imap.gmail.com"
+
+# connect to host using SSL
+mb = imaplib.IMAP4_SSL(imap_url)
+
+## login to server
+rv, mesasge  = mb.login(myemailaddress, password)
+
+
+# 'OK', [b'LOGIN completed']
+mb.select('INBOX')
+
+# remove twitter emails from your inbox by using from field below
+search = '(FROM "Twitter")'
+
+result, data = mb.uid('search', None, search)
+uidList = data[0].split()
+
+print(uidList)
+
+print(uidList)
+for uid in uidList:
+    mb.uid('STORE',uid, '+X-GM-LABELS', '(\\Trash)')
+    mb.expunge()

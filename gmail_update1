@@ -1,0 +1,53 @@
+import imaplib
+
+class gmails_log:
+
+
+    def __init__(self):
+        self.myemailaddress = 'your_email_address'
+        self.mypassword = ""
+        with open("password.txt", "r") as f:
+            self.password = f.read().strip()
+        self.imap_url = "imap.gmail.com"
+        # connect to host using SSL
+        self.mb = imaplib.IMAP4_SSL(self.imap_url)
+        ## login to server
+        self.mesasge  = self.mb.login(self.myemailaddress, self.password)
+
+   
+    def gmails_login(self):
+        # 'OK', [b'LOGIN completed']
+        label_search = input('what label you want to search in. ')
+        self.mb.select(label_search)
+
+        body = input('Please provide body of the email you want to search for: ')
+        body1 = ("BODY ")
+        body2 = body1 + body
+        
+        gm_from = input('Please provide name of the email you want to search from: ')
+        gm_1 = ("FROM ")
+        gm_2 = gm_1 + gm_from
+     
+        
+        keyword_gm = input('Please provide name of the email you want to search from: ')
+        keyword_1 = ("FROM ")
+        keyword_2 = keyword_1 + keyword_gm
+       
+
+        search = "OR ({body}) (OR ({gm2}) ({keyword_2}))"
+   
+
+        result, data = self.mb.uid('search', None, body2) 
+        self.uidList = data[0].split()
+
+      # print('There are: ', len(uidList), "emails in the", label_search)
+ 
+        return self.uidList
+
+
+        
+
+  
+
+
+
